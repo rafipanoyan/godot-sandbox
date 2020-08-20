@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Turret/Turret.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
@@ -8,6 +8,36 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30.8303, 31.0937 )
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform float width = 0.1;
+
+const float R = 0.5;
+const vec2 ORIGIN = vec2(R, R);
+
+
+float plot_circle(float dist, float radius) {
+	float half_width = width / 2.0;
+	return smoothstep(radius - half_width, radius, dist) - 
+		smoothstep(radius, radius + half_width, dist);
+}
+
+void fragment() {
+	float margin = 0.5 - width;
+	float radius = min(abs(sin(TIME * 2.0)) / 2.0, margin);
+	
+	float dist = length(UV - ORIGIN);		
+	float circle = plot_circle(dist, radius);
+
+	COLOR = vec4(vec3(0.0), circle);
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/width = 0.1
 
 [node name="Turret" type="Area2D"]
 position = Vector2( 512, 300 )
@@ -32,5 +62,6 @@ target_path = NodePath("../../Target")
 target_speed = 300.0
 
 [node name="Target" type="Sprite" parent="."]
+material = SubResource( 3 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 2 )
