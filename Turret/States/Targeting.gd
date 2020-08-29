@@ -21,7 +21,8 @@ func unhandled_input(event):
 		state_machine.transition_to("Move")
 
 func physics_process(delta):
-	current_target_distance_from_turret += min(target_speed * delta, MAX_TARGET_DISTANCE)
+	current_target_distance_from_turret += target_speed * delta
+	current_target_distance_from_turret = min(current_target_distance_from_turret, MAX_TARGET_DISTANCE)
 	var target_vec = Vector2.UP * current_target_distance_from_turret
 	target.position = target_vec
 
