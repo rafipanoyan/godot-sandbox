@@ -4,9 +4,7 @@ var current_direction_vec := Vector2.UP
 
 func unhandled_input(event):
 	if(Input.is_action_just_pressed("fire")):
-		state_machine.transition_to("Targeting", {
-			"current_direction": current_direction_vec
-		})
+		state_machine.transition_to("Targeting")
 
 func physics_process(delta):
 	rotate_to_mouse()
